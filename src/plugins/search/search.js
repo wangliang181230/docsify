@@ -98,6 +98,20 @@ export function genIndex(path, content = '', router, depth) {
         slug = router.toURL(path, { id: slugify(escapeHtml(text)) });
       }
 
+      // fix 404
+      let pathname = location.pathname;
+      let flag = false;
+      while (slug.startsWith('#/../') && pathname.lastIndexOf('/') > 1) {
+        flag = true;
+        if (pathname.endsWith('/')) {
+          pathname = pathname.substring(0, pathname.length - 1);
+        }
+        pathname = pathname.substring(0, pathname.lastIndexOf('/'));
+
+        slug = '#/' + slug.substring(5);
+      }
+      slug = pathname + (flag ? '/' : '') + slug;
+
       if (str) {
         title = removeDocsifyIgnoreTag(str);
       }
@@ -275,9 +289,9 @@ export function init(config, vm) {
 
   const isExpired = localStorage.getItem(expireKey) < Date.now();
 
-  INDEXS = JSON.parse(localStorage.getItem(indexKey));
+  INDEXS = isExpired ? null : JSON.parse(localStorage.getItem(indexKey));
 
-  if (isExpired) {
+  if (!INDEXS) {
     INDEXS = {};
   } else if (!isAuto) {
     return;
