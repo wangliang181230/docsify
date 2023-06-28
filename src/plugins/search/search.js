@@ -77,6 +77,12 @@ function saveData(maxAge, expireKey, indexKey) {
   localStorage.setItem(indexKey, JSON.stringify(INDEXS));
 }
 
+function concatSlugAndPathname(slug) {
+  let pathname = location.pathname;
+  slug = pathname + (pathname.lastIndexOf("/") >= 0 ? "" : "/") + slug;
+  return slug;
+}
+
 export function genIndex(path, content = '', router, depth) {
   const tokens = window.marked.lexer(content);
   const slugify = window.Docsify.slugify;
@@ -96,19 +102,7 @@ export function genIndex(path, content = '', router, depth) {
         slug = router.toURL(path, { id: slugify(escapeHtml(text)) });
       }
 
-      // fix 404
-      let pathname = location.pathname;
-      let flag = false;
-      while (slug.startsWith('#/../') && pathname.lastIndexOf('/') > 1) {
-        flag = true;
-        if (pathname.endsWith('/')) {
-          pathname = pathname.substring(0, pathname.length - 1);
-        }
-        pathname = pathname.substring(0, pathname.lastIndexOf('/'));
-
-        slug = '#/' + slug.substring(5);
-      }
-      slug = pathname + (flag ? '/' : '') + slug;
+      slug = concatSlugAndPathname(slug);
 
       if (str) {
         title = removeDocsifyIgnoreTag(str);
@@ -118,6 +112,7 @@ export function genIndex(path, content = '', router, depth) {
     } else {
       if (tokenIndex === 0) {
         slug = router.toURL(path);
+        slug = concatSlugAndPathname(slug);
         index[slug] = {
           slug,
           title: path !== '/' ? path.slice(1) : 'Home Page',
@@ -287,11 +282,9 @@ export function init(config, vm) {
 
   const isExpired = localStorage.getItem(expireKey) < Date.now();
 
-  INDEXS = isExpired ? null : JSON.parse(localStorage.getItem(indexKey));
+  INDEXS = isExpired ? {} : JSON.parse(localStorage.getItem(indexKey));
 
-  if (!INDEXS) {
-    INDEXS = {};
-  } else if (!isAuto) {
+  if (!isExpired && !isAuto) {
     return;
   }
 
