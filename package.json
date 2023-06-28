@@ -13,6 +13,9 @@
     "type": "git",
     "url": "git+https://github.com/docsifyjs/docsify.git"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "main": "lib/docsify.js",
   "unpkg": "lib/docsify.min.js",
   "files": [
@@ -20,7 +23,6 @@
     "themes"
   ],
   "scripts": {
-    "bootstrap": "npm i && lerna bootstrap && npm run build:ssr",
     "build:cover": "node build/cover.js",
     "build:css:min": "mkdirp lib/themes && npm run css -- -o lib/themes && node build/mincss.js",
     "build:css": "mkdirp themes && npm run css -- -o themes",
@@ -65,7 +67,7 @@
     "*.js": "eslint --fix"
   },
   "dependencies": {
-    "marked": "^1.2.9",
+    "marked": "^4.2.12",
     "medium-zoom": "^1.0.8",
     "opencollective-postinstall": "^2.0.2",
     "prismjs": "^1.29.0",
@@ -84,22 +86,22 @@
     "browser-sync": "^2.26.12",
     "chokidar": "^3.4.2",
     "common-tags": "^1.8.0",
-    "conventional-changelog-cli": "^2.1.0",
+    "conventional-changelog-cli": "^3.0.0",
     "copy-dir": "^1.2.0",
-    "cross-env": "^6.0.3",
+    "cross-env": "^7.0.3",
     "cssnano": "^4.1.10",
     "eslint": "^8.7.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.20.1",
-    "eslint-plugin-jest": "^26.0.0",
-    "eslint-plugin-playwright": "^0.8.0",
+    "eslint-plugin-jest": "^27.2.1",
+    "eslint-plugin-playwright": "^0.12.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "husky": "^3.1.0",
+    "husky": "^8.0.3",
     "jest": "^27.4.7",
-    "lerna": "^5.5.1",
-    "lint-staged": "^10.4.0",
+    "lerna": "^7.0.2",
+    "lint-staged": "^13.2.2",
     "live-server": "^1.2.1",
-    "mkdirp": "^0.5.1",
+    "mkdirp": "^3.0.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.5.1",
     "rimraf": "^3.0.0",
@@ -111,7 +113,7 @@
     "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-uglify": "^6.0.4",
     "serve-handler": "^6.1.2",
-    "stylus": "^0.54.5",
+    "stylus": "^0.59.0",
     "vue2": "npm:vue@^2.6.12",
     "vue3": "npm:vue@^3.0.0",
     "xhr-mock": "^2.5.1"
